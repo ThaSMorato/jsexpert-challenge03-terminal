@@ -1,3 +1,4 @@
+import { currencies, currencies_languages } from "../config/currency.js";
 import languageConfig from "../config/language.js";
 
 const defaultLanguage = languageConfig.default;
@@ -5,10 +6,22 @@ const defaultLanguage = languageConfig.default;
 class Income {
   constructor({ position, expectation, conversion01, conversion02, conversion03 }) {
     this.position = position;
-    this.expectation = expectation || { currency: "BRL", language: "pt-BR" };
-    this.conversion01 = conversion01 || { currency: "USD", language: "en-US" };
-    this.conversion02 = conversion02 || { currency: "EUR", language: "en-GB" };
-    this.conversion03 = conversion03 || { currency: "RUB", language: "ru-RU" };
+    this.expectation = expectation || {
+      currency: currencies.expectation,
+      language: currencies_languages.expectation,
+    };
+    this.conversion01 = conversion01 || {
+      currency: currencies.options.conversion01,
+      language: currencies_languages.options.conversion01,
+    };
+    this.conversion02 = conversion02 || {
+      currency: currencies.options.conversion02,
+      language: currencies_languages.options.conversion02,
+    };
+    this.conversion03 = conversion03 || {
+      currency: currencies.options.conversion03,
+      language: currencies_languages.options.conversion03,
+    };
   }
 
   format() {
