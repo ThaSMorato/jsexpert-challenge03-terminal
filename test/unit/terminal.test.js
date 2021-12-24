@@ -8,7 +8,7 @@ import readline from "readline";
 import CustomTerminal from "../../src/terminal.js";
 import IncomeService from "../../src/service/IncomeService.js";
 
-describe("IncomeService Suite Tests", () => {
+describe("Terminal Suite Tests", () => {
   let terminal = {};
 
   before(() => {
