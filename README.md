@@ -62,7 +62,7 @@ https://user-images.githubusercontent.com/41883467/147079954-2ae5853d-8f1b-44a6-
 Seguindo o padrão que já usamos anteriormente, é esperado que com o desafio pronto, ao rodar
 `npm run test` todos os testes devem passar. O resultado deve ser algo parecido com isso:
 
-![image](https://user-images.githubusercontent.com/41883467/147080202-a47b8873-6e00-4d4e-b94b-a5e95933c50b.png)
+![image](repository/tests.png)
 
 ### Extras
 
