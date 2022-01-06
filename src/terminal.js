@@ -1,29 +1,17 @@
-import DraftLog from "draftlog";
-import chalkTable from "chalk-table";
-import readline from "readline";
-import terminalConfig from "./config/terminal.js";
-
-const TABLE_OPTIONS = terminalConfig.table;
+import { TableBase } from "./entity/TableBase.js";
+import { TerminalBase } from "./entity/TerminalBase.js";
 
 class CustomTerminal {
   constructor() {
-    this.print = {};
     this.data = [];
+    this.table = {};
+    this.terminal = {};
   }
 
-  initialize() {
-    DraftLog(console).addLineListener(process.stdin);
-
-    this.terminal = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    this.initializeTable();
-  }
-
-  initializeTable() {
-    this.print = console.draft(this.createTable());
+  initialize({ terminal = new TerminalBase(), table = new TableBase() }) {
+    this.table = table;
+    this.terminal = terminal;
+    this.table.initialize(this.data);
   }
 
   closeTerminal() {
@@ -31,16 +19,12 @@ class CustomTerminal {
   }
 
   question(msg = "") {
-    return new Promise((resolve) => this.terminal.question(msg, resolve));
+    return this.terminal.question(msg);
   }
 
   updateTable(item) {
     this.data.push(item);
-    this.print(this.createTable());
-  }
-
-  createTable() {
-    return chalkTable(TABLE_OPTIONS, this.data);
+    this.table.print(this.data);
   }
 }
 
