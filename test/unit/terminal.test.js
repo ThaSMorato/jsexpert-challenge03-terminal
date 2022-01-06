@@ -13,7 +13,6 @@ describe("Terminal Suite Tests", () => {
   });
 
   it("should start with table and terminal as empty object, data as empty array ", () => {
-    console.log(terminal);
     expect(terminal.table).to.be.deep.equal({});
     expect(terminal.data).to.be.deep.equal([]);
     expect(terminal.terminal).to.be.deep.equal({});
