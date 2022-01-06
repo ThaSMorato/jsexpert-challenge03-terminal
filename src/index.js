@@ -3,13 +3,20 @@ import "dotenv/config";
 import CustomTerminal from "./terminal.js";
 import IncomeService from "./service/IncomeService.js";
 import { currencies } from "./config/currency.js";
+import Terminal from "./entity/implementations/Terminal.js";
+import Table from "./entity/implementations/Table.js";
 
 const VOCABULARY = {
   STOP: ":q",
 };
 
+Terminal.initialize();
+
 const terminal = new CustomTerminal();
-terminal.initialize();
+terminal.initialize({
+  terminal: Terminal,
+  table: Table,
+});
 
 const service = new IncomeService();
 
