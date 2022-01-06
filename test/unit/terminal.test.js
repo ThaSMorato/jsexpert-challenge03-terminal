@@ -1,12 +1,9 @@
 import { describe, it, before, after } from "mocha";
 import { expect } from "chai";
 
-import { incomeRepositoryMock } from "../mocks/incomeRepository.mock.js";
-
-import readline from "readline";
-
 import CustomTerminal from "../../src/terminal.js";
-import IncomeService from "../../src/service/IncomeService.js";
+import { tableMock, stubs as tableStubs } from "../mocks/TableMock.js";
+import { terminalMock, stubs as terminalStubs } from "../mocks/TerminalMock.js";
 
 describe("Terminal Suite Tests", () => {
   let terminal = {};
@@ -15,31 +12,52 @@ describe("Terminal Suite Tests", () => {
     terminal = new CustomTerminal();
   });
 
-  after(() => {
-    terminal.closeTerminal();
-  });
-
-  it("should start with print as empty object, data as empty array and terminal as undefined", () => {
-    expect(terminal.print).to.be.deep.equal({});
+  it("should start with table and terminal as empty object, data as empty array ", () => {
+    console.log(terminal);
+    expect(terminal.table).to.be.deep.equal({});
     expect(terminal.data).to.be.deep.equal([]);
-    expect(terminal.terminal).to.be.undefined;
+    expect(terminal.terminal).to.be.deep.equal({});
   });
 
   it("should initialize all variables on initialize method", () => {
-    terminal.initialize();
+    terminal.initialize({
+      terminal: terminalMock,
+      table: tableMock,
+    });
 
-    expect(typeof terminal.print).to.be.equal("function");
-    expect(terminal.data).to.be.deep.equal([]);
-    expect(terminal.terminal).to.be.instanceOf(readline.Interface);
+    expect(terminal.table).to.be.deep.equal(tableMock);
+    expect(terminal.terminal).to.be.deep.equal(terminalMock);
+    expect(tableStubs.initializeStub.called).to.be.true;
+    expect(tableStubs.initializeStub.args[0][0]).to.be.deep.equal(terminal.data);
   });
 
   it("should push an item on the data with updateTable method", async () => {
-    const repository = incomeRepositoryMock;
-    const service = new IncomeService({ incomeRepository: repository });
-    const income = await service.generateIncomeFromString("Dev; 3500");
+    const content = "test content";
 
-    terminal.updateTable(income.format());
+    terminal.updateTable(content);
 
-    expect(terminal.data.length).to.be.equal(1);
+    expect(terminal.data[0]).to.be.equal(content);
+    expect(tableStubs.printStub.called).to.be.true;
+    expect(tableStubs.printStub.args[0][0]).to.be.equal(terminal.data);
+  });
+
+  it("should call terminal.question method and receive an answer", async () => {
+    const content = "question?";
+
+    const expected = "answer";
+
+    terminalStubs.questionStub.resolves(expected);
+
+    const result = await terminal.question(content);
+
+    expect(result).to.be.equal(expected);
+    expect(terminalStubs.questionStub.called).to.be.true;
+    expect(terminalStubs.questionStub.args[0][0]).to.be.equal(content);
+  });
+
+  it("should call terminal.close method on closeTerminal", () => {
+    terminal.closeTerminal();
+
+    expect(terminalStubs.closeStub.called).to.be.true;
   });
 });
